@@ -1,3 +1,7 @@
+Repository 
+https://github.com/shayja/go-template-api/blob/main/cmd/app/app.go
+
+
 install go gin 
 go get -u github.com/gin-gonic/gin
 
@@ -24,4 +28,4 @@ gunakan Return kosong untuk menangani Error
 
 <!-- Task -->
 
-buat util , success response , errResponse , service , repository
+buat util , success response , errResponse , service , repository , crud
