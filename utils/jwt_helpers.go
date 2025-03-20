@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"log"
+	"GinGonicGorm/entity"
 	"os"
 	"time"
 
@@ -9,24 +9,29 @@ import (
 )
 
 type Claims struct {
-	UserId string `json:"user_id"`
+	UserId   string `json:"user_id"`
+	Username string `json:"username"`
 	jwt.RegisteredClaims
 }
 
-var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
+func GenerateToken(userId entity.User) (string, error) {
 
-func GenerateToken(userId string) (string, error) {
+	var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
+
+	// Todo -> Untuk isi email nya
 	claims := Claims{
-		UserId: userId,
+		UserId:   userId.ID,
+		Username: userId.Username,
 		RegisteredClaims: jwt.RegisteredClaims{
+			// 24 Jam
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 24)),
+
+			// 20 detik
+			// ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Second * 20)),
 		},
 	}
 
-	log.Println("Apa isi claims : ", claims)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	log.Println("isi token : ", token)
-	log.Println("isi jwtSecret : ", jwtSecret)
 	return token.SignedString(jwtSecret)
 }

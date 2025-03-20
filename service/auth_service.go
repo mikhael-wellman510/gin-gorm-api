@@ -6,8 +6,8 @@ import (
 	"GinGonicGorm/repository"
 	"GinGonicGorm/utils"
 	"context"
+	"errors"
 	"fmt"
-	"log"
 )
 
 type (
@@ -67,13 +67,27 @@ func (as *authService) RegisterAccount(ctx context.Context, req dto.UserRequest)
 
 func (as *authService) LoginAccount(ctx context.Context, req dto.LoginRequest) (dto.LoginResponse, error) {
 
-	authRepository, err := as.userRepository.FindByEmail(ctx, req.Email)
+	// CHECK EMAIL
+	user, err := as.userRepository.FindByEmail(ctx, req.Email)
 
 	if err != nil {
-		return dto.LoginResponse{}, err
+		return dto.LoginResponse{}, errors.New("INVALID EMAIL")
 	}
 
-	log.Println("Result : ", authRepository)
+	// Check Password
 
-	return dto.LoginResponse{}, nil
+	checkPassword := utils.CheckPasswordHash(user.Password, req.Password)
+
+	if !checkPassword {
+
+		return dto.LoginResponse{}, errors.New("INVALID PASSWORD")
+	}
+
+	// Generate JWT TOKEN
+
+	token, _ := utils.GenerateToken(user)
+
+	return dto.LoginResponse{
+		Token: token,
+	}, nil
 }

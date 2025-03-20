@@ -5,7 +5,7 @@ import (
 	"GinGonicGorm/entity"
 	"GinGonicGorm/repository"
 	"context"
-	"log"
+
 	"math"
 )
 
@@ -44,7 +44,6 @@ func (ps *productService) CreateProductService(ctx context.Context, req dto.Prod
 	// panggil lewat struct
 	product, err := ps.productRepository.SaveProduct(ctx, nil, prod)
 
-	log.Println("Hasil prods service : ", product)
 	if err != nil {
 		return dto.ProductResponse{}, err
 	}
@@ -92,7 +91,7 @@ func (ps *productService) FindAllProduct(ctx context.Context) ([]dto.ProductResp
 	}
 
 	var arrProductBuilder []dto.ProductResponse
-	log.Println(product)
+
 	for _, val := range product {
 
 		data := dto.ProductResponse{

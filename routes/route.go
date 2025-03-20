@@ -2,6 +2,7 @@ package routes
 
 import (
 	"GinGonicGorm/controller"
+	"GinGonicGorm/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,6 +12,8 @@ func Product(route *gin.Engine, productController controller.ProductController, 
 	api := route.Group("/api/v1")
 
 	product := api.Group("/product")
+	// Tambahka Middleware
+	product.Use(middleware.AuthMiddleware())
 	{
 		product.GET("/findAll", productController.FindAllProduct)
 		product.POST("/createProduct", productController.CreateProduct)
@@ -21,6 +24,7 @@ func Product(route *gin.Engine, productController controller.ProductController, 
 	}
 
 	user := api.Group("/user")
+
 	{
 		user.POST("/register", authController.Register)
 		user.POST("/signIn", authController.Login)

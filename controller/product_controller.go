@@ -4,7 +4,6 @@ import (
 	"GinGonicGorm/dto"
 	"GinGonicGorm/service"
 	"GinGonicGorm/utils"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -41,7 +40,7 @@ func (pc *productController) CreateProduct(ctx *gin.Context) {
 		/*
 			ini akan masuk error [tipe data beda , ada field yg tidak di isi (required)]
 		*/
-		log.Println("Error : ", err.Error())
+
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
 		return
 	}
@@ -62,7 +61,7 @@ func (pc *productController) CreateProduct(ctx *gin.Context) {
 func (pc *productController) FindAllProduct(ctx *gin.Context) {
 
 	res, err := pc.productService.FindAllProduct(ctx)
-	log.Println("Isi nya : ", res)
+
 	if err != nil {
 		fail := utils.BuildResponseFailed(err.Error())
 		ctx.JSON(http.StatusBadRequest, fail)
