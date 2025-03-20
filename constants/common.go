@@ -1,5 +1,7 @@
 package constants
 
 const (
-	PORT = ":8000"
+	PORT      = ":8000"
+	OK        = 200
+	NOT_FOUND = 404
 )

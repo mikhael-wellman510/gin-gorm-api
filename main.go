@@ -34,7 +34,10 @@ func main() {
 	// var bookController controller.BookController = controller.NewBookController()
 
 	// routes.Book(app, bookController)
-	routes.Product(app, productController)
+	var userRepository repository.UserRepository = repository.NewUserRepository(db)
+	var authService service.AuthService = service.NewAuthService(userRepository)
+	var authController controller.AuthController = controller.NewAuthController(authService)
+	routes.Product(app, productController, authController)
 
 	// Port and Running
 	port := os.Getenv("SERVER_PORT")

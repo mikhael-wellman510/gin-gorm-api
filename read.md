@@ -1,6 +1,6 @@
 Repository 
 https://github.com/shayja/go-template-api/blob/main/cmd/app/app.go
-
+https://github.com/Caknoooo/go-gin-clean-starter
 
 install go gin 
 go get -u github.com/gin-gonic/gin
@@ -18,6 +18,9 @@ go get github.com/shopspring/decimal
 untuk menggunakan UUID di Entity
 go get github.com/google/uuid
 
+Untuk JWT
+go get -u github.com/golang-jwt/jwt/v5
+
 
 <!-- =================== -->
 gunakan Panic untuk menghentikan aplikasi
@@ -29,3 +32,5 @@ gunakan Return kosong untuk menangani Error
 <!-- Task -->
 
 buat util , success response , errResponse , service , repository , crud
+
+next -> Kirim gambar 
