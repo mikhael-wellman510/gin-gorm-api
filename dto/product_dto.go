@@ -1,6 +1,7 @@
 package dto
 
 import (
+	"GinGonicGorm/entity"
 	"time"
 
 	"github.com/shopspring/decimal"
@@ -17,6 +18,7 @@ type (
 		DescriptionProduct string          `json:"description_product"`
 		CreatedAt          time.Time       `json:"created_at"`
 		UpdatedAt          time.Time       `json:"updated_at"`
+		CategoryResponse   entity.Category `json:"category_reponse"`
 	}
 
 	ProductResponsePaggingAndFilter struct {
@@ -35,5 +37,6 @@ type (
 		WeightProduct      decimal.Decimal `json:"weight_product"`
 		StockProduct       uint8           `json:"stock_product"`
 		DescriptionProduct string          `json:"description_product"`
+		CategoryId         string          `json:"category_id"`
 	}
 )

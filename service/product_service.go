@@ -20,17 +20,26 @@ type (
 
 	productService struct {
 		productRepository repository.ProductRepository
+		categoryService   CategoryService
 	}
 )
 
-func NewProductService(productRepository repository.ProductRepository) ProductService {
+func NewProductService(productRepository repository.ProductRepository, categoryService CategoryService) ProductService {
 
 	return &productService{
 		productRepository: productRepository,
+		categoryService:   categoryService,
 	}
 }
 
 func (ps *productService) CreateProductService(ctx context.Context, req dto.ProductRequest) (dto.ProductResponse, error) {
+
+	// Save Category
+	getCategory, err := ps.categoryService.FindCategoryById(req.CategoryId)
+
+	if err != nil {
+		return dto.ProductResponse{}, err
+	}
 
 	prod := entity.Product{
 		Name:               req.Name,
@@ -39,6 +48,7 @@ func (ps *productService) CreateProductService(ctx context.Context, req dto.Prod
 		WeightProduct:      req.WeightProduct,
 		StockProduct:       req.StockProduct,
 		DescriptionProduct: req.DescriptionProduct,
+		CategoryId:         getCategory.ID,
 	}
 
 	// panggil lewat struct
@@ -58,6 +68,7 @@ func (ps *productService) CreateProductService(ctx context.Context, req dto.Prod
 		DescriptionProduct: product.DescriptionProduct,
 		CreatedAt:          product.CreatedAt,
 		UpdatedAt:          product.UpdatedAt,
+		CategoryResponse:   getCategory,
 	}, nil
 }
 
@@ -80,6 +91,7 @@ func (ps *productService) FindProductById(ctx context.Context, productId string)
 		DescriptionProduct: product.DescriptionProduct,
 		CreatedAt:          product.CreatedAt,
 		UpdatedAt:          product.UpdatedAt,
+		CategoryResponse:   product.Category,
 	}, nil
 }
 
@@ -104,6 +116,7 @@ func (ps *productService) FindAllProduct(ctx context.Context) ([]dto.ProductResp
 			DescriptionProduct: val.DescriptionProduct,
 			CreatedAt:          val.CreatedAt,
 			UpdatedAt:          val.UpdatedAt,
+			CategoryResponse:   val.Category,
 		}
 
 		arrProductBuilder = append(arrProductBuilder, data)
@@ -128,9 +141,17 @@ func (ps *productService) UpdateProduct(ctx context.Context, req dto.ProductRequ
 		WeightProduct:      req.WeightProduct,
 		StockProduct:       req.StockProduct,
 		DescriptionProduct: req.DescriptionProduct,
+		CategoryId:         req.CategoryId,
 	}
 
-	editProducts, err := ps.productRepository.UpdatedProduct(ctx, nil, product)
+	editProducts, errs := ps.productRepository.UpdatedProduct(ctx, nil, product)
+
+	if errs != nil {
+		return dto.ProductResponse{}, err
+	}
+	// Find Product lagi , karena join Table untuk mengambil table join nya
+
+	findProduct, err := ps.FindProductById(ctx, editProducts.ID)
 
 	if err != nil {
 		return dto.ProductResponse{}, err
@@ -145,6 +166,7 @@ func (ps *productService) UpdateProduct(ctx context.Context, req dto.ProductRequ
 		DescriptionProduct: editProducts.DescriptionProduct,
 		CreatedAt:          editProducts.CreatedAt,
 		UpdatedAt:          editProducts.UpdatedAt,
+		CategoryResponse:   findProduct.CategoryResponse,
 	}, nil
 }
 
@@ -169,6 +191,7 @@ func (ps *productService) PagginationProductWithFilterService(ctx context.Contex
 			DescriptionProduct: val.DescriptionProduct,
 			CreatedAt:          val.CreatedAt,
 			UpdatedAt:          val.UpdatedAt,
+			CategoryResponse:   val.Category,
 		}
 		productRespons = append(productRespons, res)
 	}

@@ -7,10 +7,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Product(route *gin.Engine, productController controller.ProductController, authController controller.AuthController) {
+func Router(route *gin.Engine, productController controller.ProductController, authController controller.AuthController, categoryController controller.CategoryController) {
 
 	api := route.Group("/api/v1")
 
+	// --- Product ---
 	product := api.Group("/product")
 	// Tambahka Middleware
 	product.Use(middleware.AuthMiddleware())
@@ -22,11 +23,17 @@ func Product(route *gin.Engine, productController controller.ProductController, 
 		product.PUT("/updatedProduct", productController.UpdatedProduct)
 		product.GET("/paggingAndSearch", productController.PagginationProductWithFilter)
 	}
-
+	category := api.Group("/category")
+	category.Use(middleware.AuthMiddleware())
+	{
+		category.POST("/createCategory", categoryController.CreateCategory)
+	}
+	// --- User ---
 	user := api.Group("/user")
 
 	{
 		user.POST("/register", authController.Register)
 		user.POST("/signIn", authController.Login)
 	}
+
 }

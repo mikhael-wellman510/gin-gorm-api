@@ -4,7 +4,6 @@ import (
 	"GinGonicGorm/entity"
 	"context"
 	"fmt"
-	"log"
 	"math"
 
 	"gorm.io/gorm"
@@ -38,17 +37,12 @@ jadi fungsi tx yaitu untuk membatalkan transaksi jika browser d tutup /
 atau jika postman d cancel karena karena kelamaan get data
 */
 func (r *productRepository) SaveProduct(ctx context.Context, tx *gorm.DB, product entity.Product) (entity.Product, error) {
-	// Tx itu untuk transaksional
-	// ini cek , jika tidak terhubung dengan transaksi yang lain , maka pakai dari db
+
 	if tx == nil {
 
 		tx = r.db
 	}
 
-	/*
-		Ini biasa nya untuk handle transaksional
-		Jadi contoh tipe data di db , dengan input yg d masukan beda, maka akan ke handle di sini
-	*/
 	if err := tx.WithContext(ctx).Create(&product).Error; err != nil {
 		fmt.Println("Masuk ke sini kerena err :", err)
 		return entity.Product{}, err
@@ -62,8 +56,8 @@ func (r *productRepository) FindProductById(ctx context.Context, productId strin
 	// Define dulu product nta
 	product := entity.Product{}
 	// ini untuk cari primary key kalau pake uuid
-	if err := r.db.WithContext(ctx).First(&product, "id = ?", productId).Error; err != nil {
-		fmt.Println("Error nya  : ? ", err.Error())
+	if err := r.db.WithContext(ctx).Preload("Category").First(&product, "id = ?", productId).Error; err != nil {
+
 		return entity.Product{}, err
 	}
 
@@ -74,8 +68,9 @@ func (r *productRepository) FindAllProduct(ctx context.Context) ([]entity.Produc
 
 	var product []entity.Product
 
-	if err := r.db.WithContext(ctx).Find(&product).Error; err != nil {
-		fmt.Println("Error find all : ", err)
+	// Preload untuk ambil join table nya
+	if err := r.db.WithContext(ctx).Preload("Category").Find(&product).Error; err != nil {
+
 		return nil, err
 	}
 
@@ -86,9 +81,6 @@ func (r *productRepository) UpdatedProduct(ctx context.Context, tx *gorm.DB, pro
 
 	if tx == nil {
 		tx = r.db
-
-		log.Println("Apa itu tx : ", tx)
-
 	}
 
 	if err := tx.WithContext(ctx).Updates(&product).Error; err != nil {
@@ -103,7 +95,8 @@ func (r *productRepository) PagginationAndSearchProduct(ctx context.Context, nam
 	var product []entity.Product
 	var totalItems int64
 
-	query := r.db.WithContext(ctx).Model(&entity.Product{})
+	// Menggunakan preload karena join table , asli nya ga pake
+	query := r.db.WithContext(ctx).Preload("Category").Model(&entity.Product{})
 
 	if name != "" {
 		query.Where("name LIKE ?", "%"+name+"%")

@@ -33,4 +33,4 @@ gunakan Return kosong untuk menangani Error
 
 buat util , success response , errResponse , service , repository , crud
 
-next -> Kirim gambar 
+next -> Kirim gambar , Many To One(Relasi) ,  

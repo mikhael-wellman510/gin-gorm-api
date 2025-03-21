@@ -27,9 +27,13 @@ func main() {
 	// ==== Routes ====
 	app := gin.Default()
 
+	// Tipe Data interface semua
+	var categoryRepository repository.CategoryRepository = repository.NewCategoryRepository(db)
+	var categoryService service.CategoryService = service.NewCategoryService(categoryRepository)
+	var categoryController controller.CategoryController = controller.NewCategoryService(categoryService)
 	// Register product Module
 	var productRepository repository.ProductRepository = repository.NewProductRepository(db)
-	var productService service.ProductService = service.NewProductService(productRepository)
+	var productService service.ProductService = service.NewProductService(productRepository, categoryService)
 	var productController controller.ProductController = controller.NewProductController(productService)
 	// var bookController controller.BookController = controller.NewBookController()
 
@@ -37,7 +41,7 @@ func main() {
 	var userRepository repository.UserRepository = repository.NewUserRepository(db)
 	var authService service.AuthService = service.NewAuthService(userRepository)
 	var authController controller.AuthController = controller.NewAuthController(authService)
-	routes.Product(app, productController, authController)
+	routes.Router(app, productController, authController, categoryController)
 
 	// Port and Running
 	port := os.Getenv("SERVER_PORT")
