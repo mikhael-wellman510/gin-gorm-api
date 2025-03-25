@@ -168,6 +168,7 @@ func (ps *productService) UpdateProduct(ctx context.Context, req dto.ProductRequ
 		UpdatedAt:          editProducts.UpdatedAt,
 		CategoryResponse:   findProduct.CategoryResponse,
 	}, nil
+
 }
 
 func (ps *productService) PagginationProductWithFilterService(ctx context.Context, req dto.PagginationRequest) (dto.ProductResponsePaggingAndFilter, error) {
