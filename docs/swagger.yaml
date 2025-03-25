@@ -1,0 +1,140 @@
+definitions:
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.ProductRequest:
+    properties:
+      brand:
+        type: string
+      category_id:
+        type: string
+      description_product:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      stock_product:
+        type: integer
+      weight_product:
+        type: number
+    required:
+    - brand
+    - name
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/product/createProduct:
+    post:
+      consumes:
+      - application/json
+      description: Menambahkan produk baru ke database
+      parameters:
+      - description: Product Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.ProductRequest'
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create Product
+      tags:
+      - Products
+  /api/v1/product/findAll:
+    get:
+      consumes:
+      - application/json
+      description: Fetch all available products
+      parameters:
+      - description: Bearer Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get All Products
+      tags:
+      - Products
+  /api/v1/user/signIn:
+    post:
+      consumes:
+      - application/json
+      description: Login masuk
+      parameters:
+      - description: Product Data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login
+      tags:
+      - Products
+swagger: "2.0"

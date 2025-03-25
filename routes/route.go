@@ -2,6 +2,7 @@ package routes
 
 import (
 	"GinGonicGorm/controller"
+
 	"GinGonicGorm/middleware"
 
 	"github.com/gin-gonic/gin"
@@ -10,7 +11,6 @@ import (
 func Router(route *gin.Engine, productController controller.ProductController, authController controller.AuthController, categoryController controller.CategoryController, photoController controller.PhotoController) {
 
 	api := route.Group("/api/v1")
-
 	// --- Product ---
 	product := api.Group("/product")
 	// Tambahka Middleware
@@ -23,11 +23,13 @@ func Router(route *gin.Engine, productController controller.ProductController, a
 		product.PUT("/updatedProduct", productController.UpdatedProduct)
 		product.GET("/paggingAndSearch", productController.PagginationProductWithFilter)
 	}
+
 	category := api.Group("/category")
 	category.Use(middleware.AuthMiddleware())
 	{
 		category.POST("/createCategory", categoryController.CreateCategory)
 	}
+
 	// --- User ---
 	user := api.Group("/user")
 
@@ -36,6 +38,7 @@ func Router(route *gin.Engine, productController controller.ProductController, a
 		user.POST("/signIn", authController.Login)
 	}
 
+	// --- Photo ---
 	photo := api.Group("/photo")
 	{
 		photo.POST("/upload", photoController.UploadPhoto)

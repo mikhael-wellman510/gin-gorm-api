@@ -48,6 +48,16 @@ func (uc *authController) Register(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, result)
 }
 
+// @Summary Login
+// @Description Login masuk
+// @Tags Products
+// @Accept json
+// @Produce json
+// @Param request body dto.LoginRequest true "Product Data"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /api/v1/user/signIn [post]
 func (uc *authController) Login(ctx *gin.Context) {
 
 	reqBody := dto.LoginRequest{}

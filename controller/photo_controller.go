@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"GinGonicGorm/constants"
 	"GinGonicGorm/entity"
 	"GinGonicGorm/utils"
 	"log"
@@ -46,9 +47,11 @@ func (pc *photoController) UploadPhoto(ctx *gin.Context) {
 		return
 	}
 
+	nameUrl := constants.SERVER + "/uploads/" + file.Filename
+
 	photo := entity.Photo{
 		FileName: file.Filename,
-		Url:      filePath,
+		Url:      nameUrl,
 	}
 
 	log.Println("Hasil photo : ", photo)

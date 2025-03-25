@@ -31,6 +31,17 @@ func NewProductController(productService service.ProductService) ProductControll
 	}
 }
 
+// @Summary Create Product
+// @Description Menambahkan produk baru ke database
+// @Tags Products
+// @Accept json
+// @Produce json
+// @Param request body dto.ProductRequest true "Product Data"
+// @Param Authorization header string true "Bearer Token"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /api/v1/product/createProduct [post]
 func (pc *productController) CreateProduct(ctx *gin.Context) {
 
 	reqBody := dto.ProductRequest{}
@@ -58,6 +69,17 @@ func (pc *productController) CreateProduct(ctx *gin.Context) {
 	res := utils.BuildResponseSucces("Succes", result)
 	ctx.JSON(http.StatusOK, res)
 }
+
+// @Summary Get All Products
+// @Description Fetch all available products
+// @Tags Products
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer Token"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 401 {object} map[string]interface{}
+// @Router /api/v1/product/findAll [get]
 func (pc *productController) FindAllProduct(ctx *gin.Context) {
 
 	res, err := pc.productService.FindAllProduct(ctx)

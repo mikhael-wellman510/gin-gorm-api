@@ -3,6 +3,9 @@ package main
 import (
 	"GinGonicGorm/config"
 	"GinGonicGorm/controller"
+	_ "GinGonicGorm/docs"
+
+	// Import Swagger docs
 	"GinGonicGorm/migrations"
 	"GinGonicGorm/repository"
 	"GinGonicGorm/routes"
@@ -11,6 +14,8 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -26,6 +31,9 @@ func main() {
 	}
 	// ==== Routes ====
 	app := gin.Default()
+	app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// Swagger setup
 
 	// Tipe Data interface semua
 	var categoryRepository repository.CategoryRepository = repository.NewCategoryRepository(db)

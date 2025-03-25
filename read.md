@@ -21,6 +21,11 @@ go get github.com/google/uuid
 Untuk JWT
 go get -u github.com/golang-jwt/jwt/v5
 
+untuk Swagger
+go install github.com/swaggo/swag/cmd/swag@latest
+go get -u github.com/swaggo/gin-swagger
+go get -u github.com/swaggo/files
+Lalu tambahkan anotasi di setiap controlller
 
 <!-- =================== -->
 gunakan Panic untuk menghentikan aplikasi
