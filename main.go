@@ -41,7 +41,9 @@ func main() {
 	var userRepository repository.UserRepository = repository.NewUserRepository(db)
 	var authService service.AuthService = service.NewAuthService(userRepository)
 	var authController controller.AuthController = controller.NewAuthController(authService)
-	routes.Router(app, productController, authController, categoryController)
+
+	var photoController controller.PhotoController = controller.NewPhotoController()
+	routes.Router(app, productController, authController, categoryController, photoController)
 
 	// Port and Running
 	port := os.Getenv("SERVER_PORT")

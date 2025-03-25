@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Router(route *gin.Engine, productController controller.ProductController, authController controller.AuthController, categoryController controller.CategoryController) {
+func Router(route *gin.Engine, productController controller.ProductController, authController controller.AuthController, categoryController controller.CategoryController, photoController controller.PhotoController) {
 
 	api := route.Group("/api/v1")
 
@@ -35,5 +35,15 @@ func Router(route *gin.Engine, productController controller.ProductController, a
 		user.POST("/register", authController.Register)
 		user.POST("/signIn", authController.Login)
 	}
+
+	photo := api.Group("/photo")
+	{
+		photo.POST("/upload", photoController.UploadPhoto)
+
+	}
+
+	// Yg kiri -> Path uRL yg akan di akses di browser
+	// Yg kanan -> lokasi file server
+	route.Static("/uploads", "./uploads")
 
 }
