@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Router(route *gin.Engine, productController controller.ProductController, authController controller.AuthController, categoryController controller.CategoryController, photoController controller.PhotoController) {
+func Router(route *gin.Engine, productController controller.ProductController, authController controller.AuthController, categoryController controller.CategoryController, photoController controller.PhotoController, testingController controller.TestingController) {
 
 	api := route.Group("/api/v1")
 	// --- Product ---
@@ -43,6 +43,11 @@ func Router(route *gin.Engine, productController controller.ProductController, a
 	{
 		photo.POST("/upload", photoController.UploadPhoto)
 
+	}
+
+	test := api.Group("/testing")
+	{
+		test.POST("/ai", testingController.Testing)
 	}
 
 	// Yg kiri -> Path uRL yg akan di akses di browser

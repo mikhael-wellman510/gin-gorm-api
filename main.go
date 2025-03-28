@@ -51,7 +51,9 @@ func main() {
 	var authController controller.AuthController = controller.NewAuthController(authService)
 
 	var photoController controller.PhotoController = controller.NewPhotoController()
-	routes.Router(app, productController, authController, categoryController, photoController)
+
+	var testingController controller.TestingController = controller.NewTestingController()
+	routes.Router(app, productController, authController, categoryController, photoController, testingController)
 
 	// Port and Running
 	port := os.Getenv("SERVER_PORT")

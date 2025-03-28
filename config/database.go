@@ -12,8 +12,6 @@ import (
 
 func SetUpDatabaseConnection() *gorm.DB {
 
-	// dsn := "root:adm1234@tcp(127.0.0.1:3306)/golang_db?charset=utf8mb4&parseTime=True&loc=Local"
-
 	errEnv := godotenv.Load()
 
 	if errEnv != nil {
