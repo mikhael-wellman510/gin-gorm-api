@@ -18,6 +18,11 @@ services:
     image: mysql:8.0
     container_name: myapp_db
     restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: adm1234
+      MYSQL_DATABASE: golang_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: adm1234
     env_file:
       - .env
     volumes:
