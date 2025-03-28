@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  api:
+    build: .
+    container_name: myapp_api
+    restart: always
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    networks:
+      - myapp_network
+
+  db:
+    image: mysql:8.0
+    container_name: myapp_db
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - myapp_network
+
+networks:
+  myapp_network:
+
+volumes:
+  db_data:
