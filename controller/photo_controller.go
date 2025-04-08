@@ -6,6 +6,7 @@ import (
 	"GinGonicGorm/utils"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,7 @@ import (
 type (
 	PhotoController interface {
 		UploadPhoto(ctx *gin.Context)
+		GetPhoto(ctx *gin.Context)
 	}
 
 	photoController struct {
@@ -23,6 +25,35 @@ type (
 func NewPhotoController() PhotoController {
 
 	return &photoController{}
+}
+
+func (pc *photoController) GetPhoto(ctx *gin.Context) {
+	fileName := ctx.Param("filename")
+
+	filePath := filepath.Join("uploads", fileName)
+
+	log.Println("Hasil File path : ", filePath)
+
+	fileInfo, err := os.Stat(filePath)
+	log.Println("err : ", err)
+
+	if os.IsNotExist(err) {
+		ctx.JSON(http.StatusNotFound, err.Error())
+		return
+	}
+
+	log.Println("file info : ", fileInfo)
+	var url string = constants.SERVER + "/uploads/" + fileName
+	log.Println("hasil : ", url)
+	res := entity.PhotoResponse{
+		Url:       url,
+		CreatedAt: fileInfo.ModTime(),
+	}
+
+	result := utils.BuildResponseSucces("Sukses", res)
+
+	ctx.JSON(http.StatusOK, result)
+
 }
 
 func (pc *photoController) UploadPhoto(ctx *gin.Context) {

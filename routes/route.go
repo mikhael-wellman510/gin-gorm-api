@@ -42,7 +42,8 @@ func Router(route *gin.Engine, productController controller.ProductController, a
 	photo := api.Group("/photo")
 	{
 		photo.POST("/upload", photoController.UploadPhoto)
-
+		photo.GET("/photos/:filename", photoController.GetPhoto)
+		// photo.GET("/photo")
 	}
 
 	test := api.Group("/testing")
